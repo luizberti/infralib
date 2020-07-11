@@ -1,0 +1,45 @@
+#!/bin/sh -e
+
+
+# KUBERNETES
+# ==========
+
+ksonnet() {
+    tag=master
+    repo=https://github.com/ksonnet/ksonnet-lib.git
+    subdir=ksonnet.beta.4
+    vendor=ksonnet.beta.4
+}
+
+
+# OBSERVABILITY
+# =============
+
+grafonnet() {
+    tag=master
+    repo=https://github.com/grafana/grafonnet-lib.git
+    subdir=grafonnet
+    vendor=grafonnet
+}
+
+
+# =========================================================
+# =========================================================
+
+mkdir -p vendor
+mkdir -p /tmp/vendordeps
+
+for dependency in `declare -F | awk '{print $3}'`; do
+    $dependency
+    if test ! -d vendor/$vendor; then
+        rm -rf /tmp/vendordeps/$dependency
+        # TODO --filter=combine:blob:none+tree:0 is better but GitHub doesn't support it (yet?)
+        git clone -q --depth=1 --filter=tree:0 --no-checkout $repo /tmp/vendordeps/$dependency
+        git -C /tmp/vendordeps/$dependency checkout -q $tag -- $subdir
+        mv /tmp/vendordeps/$dependency/$subdir vendor/$vendor
+        rm -rf /tmp/vendordeps/$dependency
+    fi
+done
+
+rm -rf /tmp/vendordeps
+
