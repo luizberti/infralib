@@ -4,12 +4,25 @@
 # KUBERNETES
 # ==========
 
+kubecfg() {
+    tag=master
+    repo=https://github.com/bitnami/kubecfg.git
+    subdir=lib
+    vendor=kubecfg
+}
+
 ksonnet() {
     tag=master
     repo=https://github.com/ksonnet/ksonnet-lib.git
     subdir=ksonnet.beta.4
     vendor=ksonnet.beta.4
 }
+
+# TODO https://github.com/bitnami-labs/kube-libsonnet
+
+
+# TERRAFORM
+# =========
 
 
 # OBSERVABILITY
@@ -24,6 +37,7 @@ grafonnet() {
 
 
 # =========================================================
+# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 # =========================================================
 
 mkdir -p vendor
